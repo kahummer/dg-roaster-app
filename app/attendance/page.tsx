@@ -1,5 +1,3 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AttendanceForm } from '@/components/attendance-form'

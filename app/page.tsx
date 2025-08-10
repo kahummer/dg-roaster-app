@@ -102,7 +102,7 @@ export default async function Dashboard() {
         <CardContent>
           {members.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              No members added yet. Click "Add Member" to get started.
+              No members added yet. Click &quot;Add Member&quot; to get started.
             </p>
           ) : (
             <Table>
