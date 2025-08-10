@@ -14,8 +14,8 @@ import { submitAttendance } from '@/app/actions/submit-attendance'
 interface Member {
   id: string
   name: string
-  email?: string
-  phone?: string
+  email?: string | null
+  phone?: string | null
 }
 
 interface AttendanceFormProps {

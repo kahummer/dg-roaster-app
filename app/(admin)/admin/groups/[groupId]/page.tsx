@@ -84,12 +84,12 @@ export default async function GroupDetailPage({ params }: Props) {
     .limit(100)
 
   // Calculate attendance statistics
-  const totalRecords = attendanceRecords.length
-  const presentCount = attendanceRecords.filter(record => record.present).length
+  const totalRecords = attendanceRecords?.length ?? 0
+  const presentCount = attendanceRecords?.filter(record => record.present).length ?? 0
   const attendanceRate = totalRecords > 0 ? Math.round((presentCount / totalRecords) * 100) : 0
 
   // Group attendance by date for recent meetings
-  const attendanceByDate = attendanceRecords.reduce((acc, record) => {
+  const attendanceByDate = (attendanceRecords ?? []).reduce((acc, record) => {
     const date = record.meeting_date
     if (!acc[date]) {
       acc[date] = { date, total: 0, present: 0, members: [] }
@@ -103,8 +103,8 @@ export default async function GroupDetailPage({ params }: Props) {
   }, {} as Record<string, { date: string; total: number; present: number; members: string[] }>)
 
   const recentMeetings = Object.values(attendanceByDate)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 10)
+    .sort((a, b) => new Date((b as { date: string; total: number; present: number; members: string[] }).date).getTime() - new Date((a as { date: string; total: number; present: number; members: string[] }).date).getTime())
+    .slice(0, 10) as { date: string; total: number; present: number; members: string[] }[]
 
   return (
     <div className="container mx-auto p-6">
@@ -131,7 +131,7 @@ export default async function GroupDetailPage({ params }: Props) {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{members.length}</div>
+            <div className="text-2xl font-bold">{members?.length ?? 0}</div>
             <p className="text-xs text-muted-foreground">Active members</p>
           </CardContent>
         </Card>
@@ -165,11 +165,11 @@ export default async function GroupDetailPage({ params }: Props) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Members ({members.length})
+              Members ({members?.length ?? 0})
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {members.length === 0 ? (
+            {(members?.length ?? 0) === 0 ? (
               <p className="text-center text-muted-foreground py-8">
                 No members in this group yet.
               </p>
@@ -183,7 +183,7 @@ export default async function GroupDetailPage({ params }: Props) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {members.map((member) => (
+                  {members?.map((member) => (
                     <TableRow key={member.id}>
                       <TableCell className="font-medium">{member.name}</TableCell>
                       <TableCell>{member.email || '-'}</TableCell>
